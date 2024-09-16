@@ -4,6 +4,7 @@ import com.msvc.usuario.entity.Hotel;
 import com.msvc.usuario.entity.Calificacion;
 import com.msvc.usuario.entity.Usuario;
 import com.msvc.usuario.exception.ResourceNotFoundException;
+import com.msvc.usuario.external.HotelService;
 import com.msvc.usuario.repository.UsuarioRepository;
 import com.msvc.usuario.service.UsuarioService;
 
@@ -31,8 +32,8 @@ public class UsuarioServiceImpl implements UsuarioService {
 	    @Autowired
 	    private UsuarioRepository usuarioRepository;
 
-	   // @Autowired
-	   // private HotelService hotelService;
+	    @Autowired
+	    private HotelService hotelService;
 
 	    @Override
 	    public Usuario saveUsuario(Usuario usuario) {
@@ -69,12 +70,12 @@ public class UsuarioServiceImpl implements UsuarioService {
 	
 	        List<Calificacion> listaCalificaciones = calificaciones.stream().map(calificacion -> {
 	            System.out.println(calificacion.getHotelId());
-	            ResponseEntity<Hotel> forEntity = restTemplate.getForEntity("http://MicroServicio-Hotel:8081/hoteles/"+calificacion.getHotelId(),Hotel.class);
+	            //ResponseEntity<Hotel> forEntity = restTemplate.getForEntity("http://MicroServicio-Hotel:8081/hoteles/"+calificacion.getHotelId(),Hotel.class);
 
-	            //Hotel hotel = hotelService.getHotel(calificacion.getHotelId());
-	            Hotel hotel = forEntity.getBody();
+	            Hotel hotel = hotelService.getHotel(calificacion.getHotelId());
+	            //Hotel hotel = forEntity.getBody();
 
-	            logger.info("Respuesta con codigo de estado : {}",forEntity.getStatusCode());
+	            //logger.info("Respuesta con codigo de estado : {}",forEntity.getStatusCode());
 
 	            calificacion.setHotel(hotel);
 
