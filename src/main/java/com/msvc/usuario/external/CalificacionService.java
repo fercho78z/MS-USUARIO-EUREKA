@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 @FeignClient(name = "MicroServicio-Calificacion-1")
 public interface CalificacionService {
 	
-	@GetMapping("/calificacion/{hotelId}")
+	@GetMapping
 	Calificacion getCalificacion(@PathVariable String calificacionId);
     
     @PostMapping
