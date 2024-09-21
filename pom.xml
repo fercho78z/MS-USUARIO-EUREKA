@@ -39,11 +39,11 @@
 		<dependency>
 			<groupId>org.springframework.cloud</groupId>
 			<artifactId>spring-cloud-starter-bootstrap</artifactId>	
-		</dependency>	
+		</dependency>	<!--
 		<dependency>
 			<groupId>org.springframework.cloud</groupId>
 			<artifactId>spring-cloud-starter-loadbalancer</artifactId>
-		</dependency>
+		</dependency>-->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-data-jpa</artifactId>
@@ -86,12 +86,6 @@
 		<dependency>
 			<groupId>org.springframework.cloud</groupId>
 			<artifactId>spring-cloud-starter-openfeign</artifactId>
-		</dependency>
-
-		<dependency>
-			<groupId>com.msvc.hotel</groupId>
-			<artifactId>MircoServicios-Hotel</artifactId>
-			<version>0.0.1-SNAPSHOT</version>
 		</dependency>
 	</dependencies>
 	<dependencyManagement>
