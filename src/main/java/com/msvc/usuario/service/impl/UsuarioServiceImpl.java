@@ -4,6 +4,7 @@ import com.msvc.usuario.entity.Hotel;
 import com.msvc.usuario.entity.Calificacion;
 import com.msvc.usuario.entity.Usuario;
 import com.msvc.usuario.exception.ResourceNotFoundException;
+import com.msvc.usuario.external.HotelService;
 import com.msvc.usuario.repository.UsuarioRepository;
 import com.msvc.usuario.service.UsuarioService;
 
@@ -31,8 +32,8 @@ public class UsuarioServiceImpl implements UsuarioService {
 	    @Autowired
 	    private UsuarioRepository usuarioRepository;
 
-	   // @Autowired
-	   // private HotelService hotelService;
+	    @Autowired
+	    private HotelService hotelService;
 
 	    @Override
 	    public Usuario saveUsuario(Usuario usuario) {
@@ -64,18 +65,20 @@ public class UsuarioServiceImpl implements UsuarioService {
 	        Usuario usuario = usuarioRepository.findById(usuarioId)
 	                .orElseThrow(() -> new ResourceNotFoundException("Usuario no encontrado con el ID : " + usuarioId));
 
-	        Calificacion[] calificacionesDelUsuario = restTemplate.getForObject("http://MicioServicio-Calificacion-1:8082/calificaciones/usuarios/"+usuario.getUsuarioId(),Calificacion[].class);
+	        //Usando RestTemplate
+	        Calificacion[] calificacionesDelUsuario = restTemplate.getForObject("http://MicroServicio-Calificacion-1/calificaciones/usuarios/"+usuario.getUsuarioId(),Calificacion[].class);
 	        List<Calificacion> calificaciones = Arrays.stream(calificacionesDelUsuario).collect(Collectors.toList());
-	
 	        List<Calificacion> listaCalificaciones = calificaciones.stream().map(calificacion -> {
 	            System.out.println(calificacion.getHotelId());
-	            ResponseEntity<Hotel> forEntity = restTemplate.getForEntity("http://MicroServicio-Hotel:8081/hoteles/"+calificacion.getHotelId(),Hotel.class);
+	          
+	            //Usando RestTemplate
+	            //ResponseEntity<Hotel> forEntity = restTemplate.getForEntity("http://localhost:8081/hoteles/"+calificacion.getHotelId(),Hotel.class);
+	            //Hotel hotel = forEntity.getBody();
+	            //logger.info("Respuesta con codigo de estado : {}",forEntity.getStatusCode());
 
-	            //Hotel hotel = hotelService.getHotel(calificacion.getHotelId());
-	            Hotel hotel = forEntity.getBody();
-
-	            logger.info("Respuesta con codigo de estado : {}",forEntity.getStatusCode());
-
+	            //Usando OpenFeign
+	            Hotel hotel = hotelService.getHotel(calificacion.getHotelId());
+	            
 	            calificacion.setHotel(hotel);
 
 	            return calificacion;
