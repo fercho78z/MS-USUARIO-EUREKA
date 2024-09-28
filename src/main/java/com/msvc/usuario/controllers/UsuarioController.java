@@ -3,6 +3,9 @@ package com.msvc.usuario.controllers;
 
 import com.msvc.usuario.entity.Usuario;
 import com.msvc.usuario.service.UsuarioService;
+
+import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
+import io.github.resilience4j.retry.annotation.Retry;
 //import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 //import io.github.resilience4j.retry.annotation.Retry;
 import lombok.extern.slf4j.Slf4j;
@@ -32,16 +35,16 @@ public class UsuarioController {
         List<Usuario> usuarios = usuarioService.getAllUsuarios();
         return ResponseEntity.ok(usuarios);
     }
-
+/*
     @GetMapping("/{usuarioId}")
     public ResponseEntity<Usuario> obtenerUsuario(@PathVariable String usuarioId){
         Usuario usuario = usuarioService.getUsuario(usuarioId);
         return ResponseEntity.ok(usuario);
-    }
+    }*/
     
-  /*  int cantidadReintentos = 1;
+    int cantidadReintentos = 1;
     @GetMapping("/{usuarioId}")
-    //@CircuitBreaker(name = "ratingHotelBreaker",fallbackMethod = "ratingHotelFallback")
+    @CircuitBreaker(name = "ratingHotelBreaker",fallbackMethod = "ratingHotelFallback")
     @Retry(name = "ratingHotelService",fallbackMethod = "ratingHotelFallback")
     public ResponseEntity<Usuario> obtenerUsuario(@PathVariable String usuarioId){
         log.info("Listar un solo usuario : UsuarioController");
@@ -60,5 +63,5 @@ public class UsuarioController {
               .usuarioId("1234")
               .build();
       return new ResponseEntity<>(usuario,HttpStatus.OK);
-    }*/
+    }
 }
